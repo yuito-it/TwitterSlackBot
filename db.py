@@ -132,7 +132,7 @@ def getSubscribeByChannel(channel, session: Session):
         list: A list of Subscribe objects that match the given channel.
     """
     res = session.execute(select(Subscribe).where(
-        Subscribe.channel == channel)).fetchall()
+        Subscribe.channel == channel)).scalars().all()
     return res
 
 

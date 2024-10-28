@@ -27,35 +27,7 @@ def twitterCmd(ack, say, command):
     print(options[0])
     match(options[0]):
         case "list":
-            currentSession = next(session)
-            blockTemp = [
-                {
-                    "type": "section",
-                    "text": {
-                            "type": "mrkdwn",
-                        "text": "**Subscribed users**"
-                    }
-                },
-                {
-                    "type": "divider"
-                }
-            ]
-            for subscribe in getSubscribeByChannel(command["channel_id"], currentSession):
-                section = {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f"**{getUser(subscribe.target_user)[0].name}({getUser(subscribe.target_user)[0].screen_name}**\nRT: {subscribe.retweet}\nReply: {subscribe.reply}"
-                    },
-                    "accessory": {
-                        "type": "image",
-                        "image_url": getUser(subscribe.target_user)[0].profile_image_url,
-                        "alt_text": "Icon"
-                    }
-                }
-                blockTemp.append(section)
-
-            say(blocks=blockTemp)
+            asyncio.run(listSubscribeCmd(command, say))
         case "subscribe":
             asyncio.run(subscribedAccountRegistToSended(options, command))
 
@@ -87,7 +59,7 @@ async def cronTwitterJob():
                 break
             app.client.chat_postMessage(
                 channel=subscribe.channel,
-                text=f"**@{tweet.user.screen_name}**\n{tweet.text}"
+                text=f"*@{tweet.user.screen_name}*\n{tweet.text}"
             )
             addSendedTweet(tweet.id, subscribe.channel, currentSession)
 
@@ -127,6 +99,38 @@ async def subscribedAccountRegistToSended(options, command):
         tweets = await getTweets(keyword)
     for tweet in tweets:
         addSendedTweet(tweet.id, data.channel, currentSession)
+
+
+async def listSubscribeCmd(command, say):
+    currentSession = next(session)
+    blockTemp = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "*Subscribed users*"
+            }
+        },
+        {
+            "type": "divider"
+        }
+    ]
+    for subscribe in getSubscribeByChannel(command["channel_id"], currentSession):
+        user = await getUser(subscribe.target_user)
+        section = {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"*{user[0].name}(@{user[0].screen_name})*\nRT: {subscribe.retweet}\nReply: {subscribe.reply}"
+            },
+            "accessory": {
+                "type": "image",
+                "image_url": user[0].profile_image_url,
+                "alt_text": "Icon"
+            }
+        }
+        blockTemp.append(section)
+        say(blocks=blockTemp, text="List of subscribe user")
 
 
 if __name__ == "__main__":
