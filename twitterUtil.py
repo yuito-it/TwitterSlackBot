@@ -2,11 +2,14 @@
 import os
 from twikit import Client
 
+# TODO: 4 development only
+from dotenv import load_dotenv
+load_dotenv()
+
 auth_info_1 = os.getenv('TWITTER_AUTH_INFO_1')
 auth_info_2 = os.getenv('TWITTER_AUTH_INFO_2')
 password = os.getenv('TWITTER_PASSWORD')
 
-# Initialize client
 client = Client('ja')
 
 

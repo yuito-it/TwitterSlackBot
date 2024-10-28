@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.orm import (
     DeclarativeBase,
     sessionmaker,
@@ -5,7 +6,7 @@ from sqlalchemy.orm import (
     mapped_column,
     Session
 )
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine
 from os import environ
 
 dbPassword = environ.get("DB_PASSWORD")
@@ -23,12 +24,20 @@ class Subscribe(Base):
     target_user: Mapped[str] = mapped_column()
     by_user: Mapped[str] = mapped_column()
     retweet: Mapped[bool] = mapped_column(default=False)
-    repliy: Mapped[bool] = mapped_column(default=False)
+    reply: Mapped[bool] = mapped_column(default=False)
 
 
+# engine = create_engine(
+#     f'postgresql://twibot:{dbPassword}@db/subscribeList', echo=True)
 engine = create_engine(
-    f'postgresql://twibot:{dbPassword}@db/subscribeList', echo=True)
+    'sqlite:///./subscribeList.db', echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# 4 dev
+
+
+def createDB():
+    Base.metadata.create_all(engine)
 
 
 def getDB():
@@ -60,7 +69,6 @@ def addSubscribe(subscribe: Subscribe, session: Session):
         None
     """
     # TODO: 4 development only
-    Base.metadata.create_all(engine)
 
     session.add(subscribe)
     session.commit()
@@ -78,7 +86,7 @@ def listSubscribe(session: Session):
     """
     stmt = select(Subscribe)
     result = session.execute(stmt)
-    return result.fetchall()
+    return result.scalars().all()
 
 
 def getSubscribeById(subscribe_id, session: Session):
@@ -171,7 +179,7 @@ def getSendedTweetByChannel(channel, session: Session):
         list: A list of SendedTweet objects that match the specified channel.
     """
     res = session.execute(select(SendedTweet).where(
-        SendedTweet.channel == channel)).fetchall()
+        SendedTweet.channel == channel)).scalars().all()
     return res
 
 
@@ -202,8 +210,9 @@ def deleteSendedTweet(tweet_id, session: Session):
     Returns:
         None
     """
-    session.delete(session.scalar(select(SendedTweet).where(
-        SendedTweet.tweet_id == tweet_id)))
+    tweet = getSendedTweetByTweetId(tweet_id, session)
+    if tweet:
+        session.delete(tweet.id)
     session.commit()
 
 
@@ -221,6 +230,3 @@ def addSendedTweet(tweet_id, channel, session: Session):
     """
     session.add(SendedTweet(tweet_id=tweet_id, channel=channel))
     session.commit()
-
-
-# TODO: すでに配信済みのツイートを排他する構造を構築する

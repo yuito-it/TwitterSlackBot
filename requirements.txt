@@ -2,3 +2,5 @@ sqlalchemy
 slack_bolt
 twikit
 schedule
+psycopg2
+crontab

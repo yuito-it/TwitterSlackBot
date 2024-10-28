@@ -123,3 +123,5 @@ cython_debug/
 
 # Cookie
 cookies.json
+
+*.db
