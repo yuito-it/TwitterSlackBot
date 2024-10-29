@@ -6,9 +6,9 @@ metadata:
   name: db
 spec:
   ports:
-    - name: "3306"
-      port: 3306
-      targetPort: 3306
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
   selector:
     app: db
   type: ClusterIP

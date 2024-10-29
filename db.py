@@ -30,7 +30,7 @@ class Subscribe(Base):
 # engine = create_engine(
 #     f'postgresql://twibot:{dbPassword}@db/subscribeList', echo=True)
 engine = create_engine(
-    f'mysql://twibot:{dbPassword}@db/slack_twitter', echo=True)
+    f'postgresql://twibot:{dbPassword}@db/twibot', echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # 4 dev
