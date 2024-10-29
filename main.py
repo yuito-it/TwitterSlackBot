@@ -3,6 +3,9 @@ import os
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
+import nest_asyncio
+nest_asyncio.apply()
+
 import schedule
 import time
 
@@ -78,13 +81,13 @@ async def cronTwitterJob():
 
     """
     print("[-] cronTwitterJob")
-    currentSession = next(session)
+    currentSession = next(getDB())
     for subscribe in listSubscribe(currentSession):
         tweets = []
         print(subscribe.id)
         if subscribe.reply:
             keyword = f"(from:{subscribe.target_user})"
-            tweets = getTweets(keyword)
+            tweets = await getTweets(keyword)
         else:
             keyword = f"(from:{subscribe.target_user}) -filter:replies"
             tweets = await getTweets(keyword)
@@ -101,15 +104,22 @@ async def cronTwitterJob():
         for sendedTweet in getSendedTweetByChannel(subscribe.channel, currentSession):
             if sendedTweet.tweet_id not in [tweet.id for tweet in tweets]:
                 deleteSendedTweet(sendedTweet.id, currentSession)
+    print("[-] cronTwitterJob end")
 
 
-schedule.every(1).minutes.do(cronTwitterJob)
+def cron():
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(run_schedule())
+    loop.close()
+
+
+schedule.every(1).minutes.do(cron)
 
 
 def run_schedule():
     while True:
-        schedule.run_pending()
-        time.sleep(1)
+        time.sleep(60)
+        asyncio.run(cronTwitterJob())
 
 
 async def subscribedAccountRegistToSended(options, command):
@@ -175,7 +185,7 @@ async def listSubscribeCmd(command, say):
     5. Appends the section block to the block template.
     6. Sends the constructed message back to the channel using the `say` function.
     """
-    currentSession = next(session)
+    currentSession = next(getDB())
     blockTemp = [
         {
             "type": "section",
@@ -203,7 +213,7 @@ async def listSubscribeCmd(command, say):
             }
         }
         blockTemp.append(section)
-        say(blocks=blockTemp, text="List of subscribe user")
+    say(blocks=blockTemp, text="List of subscribe user")
 
 
 async def unsubscribeCmd(command, say, options):
@@ -233,8 +243,10 @@ async def unsubscribeCmd(command, say, options):
         say("Not found")
 
 if __name__ == "__main__":
-    asyncio.run(cronTwitterJob())
-    #createDB()
-    #thread = Thread(target=run_schedule)
-    #thread.start()
-    #SocketModeHandler(app, os.getenv("SLACK_APP_TOKEN")).start()
+    # asyncio.run(cronTwitterJob())
+    createDB()
+    thread = Thread(target=run_schedule)
+    thread.start()
+    # asyncio.run(cronTwitterJob())
+    # asyncio.run(cronTwitterJob())
+    SocketModeHandler(app, os.getenv("SLACK_APP_TOKEN")).start()

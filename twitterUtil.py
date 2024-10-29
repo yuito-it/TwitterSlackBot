@@ -65,8 +65,3 @@ async def getUser(keyword):
     client.logout()
 
     return users
-
-
-keyword = "(from:@smiNoter) -filter:replies"
-keyword = "smiNoter"
-asyncio.run(getUser(keyword))
