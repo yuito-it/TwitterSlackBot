@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
       - name: bot
-        image: registry.uniproject-tech.net/yuito-it/slack-twitter-bot:1.0.8
+        image: registry.uniproject-tech.net/yuito-it/slack-twitter-bot:1.0.9
         envFrom:
         - secretRef:
             name: bot
