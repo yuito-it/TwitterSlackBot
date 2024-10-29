@@ -169,7 +169,7 @@ class SendedTweet(Base):
     __tablename__ = "sended_tweets"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    tweet_id: Mapped[str] = mapped_column(index=True)
+    tweet_id: Mapped[int] = mapped_column(index=True)
     channel: Mapped[str] = mapped_column(index=True)
 
 
