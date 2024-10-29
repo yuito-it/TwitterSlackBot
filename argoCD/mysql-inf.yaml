@@ -28,7 +28,7 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   claimRef:
-    namespace: slack-twitter-bot
+    namespace: twi-slack-bot
     name: db
   nfs:
     server: nfs.unipro.infra
