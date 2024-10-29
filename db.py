@@ -116,7 +116,13 @@ def getSubscribeByUser(user, session: Session):
         list: A list of Subscribe objects representing the subscriptions made by the user.
     """
     res = session.execute(select(Subscribe).where(
-        Subscribe.by_user == user)).fetchall()
+        Subscribe.by_user == user)).scalars().all()
+    return res
+
+
+def getSubscribeByTargetUser(target_user, session: Session):
+    res = session.execute(select(Subscribe).where(
+        Subscribe.target_user == target_user)).scalars().all()
     return res
 
 
