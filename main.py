@@ -22,11 +22,6 @@ from db import (
     createDB)
 from twitterUtil import getTweets, getUser
 
-# TODO: 4 development only
-from dotenv import load_dotenv
-from threading import Thread
-load_dotenv()
-
 session = getDB()
 
 app = App(token=os.getenv("SLACK_BOT_TOKEN"))
@@ -243,10 +238,7 @@ async def unsubscribeCmd(command, say, options):
         say("Not found")
 
 if __name__ == "__main__":
-    # asyncio.run(cronTwitterJob())
     createDB()
     thread = Thread(target=run_schedule)
     thread.start()
-    # asyncio.run(cronTwitterJob())
-    # asyncio.run(cronTwitterJob())
     SocketModeHandler(app, os.getenv("SLACK_APP_TOKEN")).start()
