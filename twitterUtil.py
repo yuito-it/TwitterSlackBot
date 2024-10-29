@@ -13,7 +13,7 @@ print(f"auth_info_1: {auth_info_1}")
 print(f"auth_info_2: {auth_info_2}")
 print(f"password: {password}")
 
-client = Client('ja', user_agent=ua.chrome)
+client = Client('ja', user_agent=ua.firefox)
 
 
 async def getTweets(keyword):

@@ -139,7 +139,7 @@ async def subscribedAccountRegistToSended(options, command):
     Returns:
         None
     """
-    currentSession = next(session)
+    currentSession = next(getDB())
     subOptions = options[2:]
 
     data = Subscribe(
