@@ -7,3 +7,4 @@ crontab
 python-dotenv
 fake-useragent
 nest_asyncio
+mysqlclient
