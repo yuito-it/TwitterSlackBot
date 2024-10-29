@@ -13,10 +13,10 @@ spec:
     spec:
       containers:
       - name: db
-        image: mysql:latest
+        image: postgres:latest
         ports:
-        - containerPort: 3306
-          hostPort: 3306
+        - containerPort: 5432
+          hostPort: 5432
           protocol: TCP
         volumeMounts:
         - name: dbvol
