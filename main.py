@@ -1,10 +1,9 @@
 import asyncio
 import os
+from threading import Thread
+
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-
-import nest_asyncio
-nest_asyncio.apply()
 
 import schedule
 import time
@@ -21,6 +20,9 @@ from db import (
     getSendedTweetByChannel,
     createDB)
 from twitterUtil import getTweets, getUser
+
+import nest_asyncio
+nest_asyncio.apply()
 
 session = getDB()
 
