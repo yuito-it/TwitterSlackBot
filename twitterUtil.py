@@ -1,6 +1,9 @@
-# import asyncio
+import asyncio
 import os
 from twikit import Client
+from fake_useragent import UserAgent
+
+ua = UserAgent(platforms="mobile")
 
 # TODO: 4 development only
 from dotenv import load_dotenv
@@ -10,7 +13,11 @@ auth_info_1 = os.getenv('TWITTER_AUTH_INFO_1')
 auth_info_2 = os.getenv('TWITTER_AUTH_INFO_2')
 password = os.getenv('TWITTER_PASSWORD')
 
-client = Client('ja')
+print(f"auth_info_1: {auth_info_1}")
+print(f"auth_info_2: {auth_info_2}")
+print(f"password: {password}")
+
+client = Client('ja', user_agent=ua.chrome)
 
 
 async def getTweets(keyword):
@@ -60,6 +67,6 @@ async def getUser(keyword):
     return users
 
 
-# keyword = "(from:@smiNoter) -filter:replies"
-# keyword = "smiNoter"
-# asyncio.run(getUser(keyword))
+keyword = "(from:@smiNoter) -filter:replies"
+keyword = "smiNoter"
+asyncio.run(getUser(keyword))

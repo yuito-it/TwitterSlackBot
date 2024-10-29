@@ -4,3 +4,5 @@ twikit
 schedule
 psycopg2
 crontab
+python-dotenv
+fake-useragent

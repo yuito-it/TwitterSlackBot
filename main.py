@@ -233,8 +233,8 @@ async def unsubscribeCmd(command, say, options):
         say("Not found")
 
 if __name__ == "__main__":
-    # asyncio.run(cronTwitterJob())
-    createDB()
-    thread = Thread(target=run_schedule)
-    thread.start()
-    SocketModeHandler(app, os.getenv("SLACK_APP_TOKEN")).start()
+    asyncio.run(cronTwitterJob())
+    #createDB()
+    #thread = Thread(target=run_schedule)
+    #thread.start()
+    #SocketModeHandler(app, os.getenv("SLACK_APP_TOKEN")).start()
