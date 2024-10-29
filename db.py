@@ -169,7 +169,7 @@ class SendedTweet(Base):
     __tablename__ = "sended_tweets"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    tweet_id: Mapped[int] = mapped_column(index=True)
+    tweet_id: Mapped[str] = mapped_column(index=True)
     channel: Mapped[str] = mapped_column(index=True)
 
 
@@ -201,7 +201,7 @@ def getSendedTweetByTweetId(tweet_id, session: Session):
         SendedTweet: The SendedTweet object with the specified tweet ID, or None if not found.
     """
     res = session.scalar(select(SendedTweet).where(
-        SendedTweet.tweet_id == tweet_id))
+        SendedTweet.tweet_id == str(tweet_id)))
     return res
 
 
