@@ -116,7 +116,7 @@ schedule.every(1).minutes.do(cron)
 def run_schedule():
     while True:
         asyncio.run(cronTwitterJob())
-        time.sleep(60)
+        time.sleep(300)
 
 
 async def subscribedAccountRegistToSended(options, command):
