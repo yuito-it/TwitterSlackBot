@@ -115,8 +115,8 @@ schedule.every(1).minutes.do(cron)
 
 def run_schedule():
     while True:
-        time.sleep(60)
         asyncio.run(cronTwitterJob())
+        time.sleep(60)
 
 
 async def subscribedAccountRegistToSended(options, command):
@@ -229,7 +229,7 @@ async def unsubscribeCmd(command, say, options):
     Returns:
         None
     """
-    currentSession = next(session)
+    currentSession = next(getDB())
     subscribe = getSubscribeByChannel(command["channel_id"], currentSession)
     subscribe = next(
         (sub for sub in subscribe if sub.target_user == options[1]), None)

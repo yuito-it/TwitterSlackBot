@@ -12,23 +12,23 @@ spec:
         app: db
     spec:
       containers:
-      - name: db
-        image: postgres:latest
-        ports:
-        - containerPort: 5432
-          hostPort: 5432
-          protocol: TCP
-        volumeMounts:
-        - name: dbvol
-          mountPath: /var/lib/mysql
-        envFrom:
-        - secretRef:
-            name: mysql
-            optional: true
+        - name: db
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+              hostPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - name: dbvol
+              mountPath: /var/lib/mysql
+          envFrom:
+            - secretRef:
+                name: mysql
+                optional: true
       volumes:
-      - name: dbvol
-        persistentVolumeClaim:
-          claimName: db
+        - name: dbvol
+          persistentVolumeClaim:
+            claimName: db
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,9 +44,16 @@ spec:
         app: bot
     spec:
       containers:
-      - name: bot
-        image: registry.uniproject-tech.net/yuito-it/slack-twitter-bot:1.0.10
-        envFrom:
-        - secretRef:
-            name: bot
-            optional: true
+        - name: bot
+          image: registry.uniproject-tech.net/yuito-it/slack-twitter-bot:1.0.10
+          envFrom:
+            - secretRef:
+                name: bot
+                optional: true
+          volumeMounts:
+            - name: cookie
+              mountPath: /cookie
+      volumes:
+        - name: cookie
+          persistentVolumeClaim:
+            claimName: cookie

@@ -28,12 +28,10 @@ class Subscribe(Base):
 
 
 # engine = create_engine(
-#     f'postgresql://twibot:{dbPassword}@db/subscribeList', echo=True)
+#     f'postgresql://twibot:{dbPassword}@db/twibot', echo=True, pool_size=10, max_overflow=30)
 engine = create_engine(
-    f'postgresql://twibot:{dbPassword}@db/twibot', echo=True, pool_size=10, max_overflow=30)
+    'sqlite:///./subscribeList.db', echo=True, pool_size=10, max_overflow=30)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# 4 dev
 
 
 def createDB():
@@ -68,7 +66,6 @@ def addSubscribe(subscribe: Subscribe, session: Session):
     Returns:
         None
     """
-    # TODO: 4 development only
 
     session.add(subscribe)
     session.commit()

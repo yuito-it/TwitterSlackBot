@@ -1,4 +1,3 @@
-import asyncio
 import os
 from twikit import Client
 from fake_useragent import UserAgent
@@ -13,19 +12,19 @@ print(f"auth_info_1: {auth_info_1}")
 print(f"auth_info_2: {auth_info_2}")
 print(f"password: {password}")
 
-client = Client('ja', user_agent=ua.firefox)
+client = Client('ja', user_agent=ua.chrome)
 
 
 async def getTweets(keyword):
-    if os.path.exists('cookies.json'):
-        client.load_cookies('cookies.json')
+    if os.path.exists('cookie/cookies.json'):
+        client.load_cookies('cookie/cookies.json')
     else:
         await client.login(
             auth_info_1=auth_info_1,
             auth_info_2=auth_info_2,
             password=password
         )
-        client.save_cookies('cookies.json')
+        client.save_cookies('temp/cookies.json')
 
     tweets = await client.search_tweet(keyword, 'Latest', count=10)
 
